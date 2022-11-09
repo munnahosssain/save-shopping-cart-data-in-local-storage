@@ -1,14 +1,8 @@
-import Cart from '../Cart/Cart';
-import { Container } from '@mui/material';
-import Products from '../Products/Products';
-import React, { useEffect, useState } from 'react';
-import { addToDb, getStoredCart } from '../../../utilities/fakedb';
-import useProducts from '../../../hooks/useProducts';
+import { useEffect, useState } from "react";
+import { addToDb, getStoredCart } from "../utilities/fakedb";
 
-const Shop = () => {
-    const [products, setProducts] = useProducts();
-    const [cart, setCart] = useState([]);
-    
+const useCart = (products) => {
+    const [cart, setCart] = useState([])
     useEffect(() => {
         const storedCart = getStoredCart();
         const saveCart = [];
@@ -38,29 +32,7 @@ const Shop = () => {
         setCart(newCart);
         addToDb(selectedProduct.id);
     };
+    return [cart, setCart];
+}
 
-    return (
-        <Container
-            sx={{
-                display: 'grid',
-                gap: 3,
-                gridTemplateColumns: 'repeat(3, 1fr)',
-            }}
-        >
-            <div>
-                <Cart cart={cart} />
-            </div>
-            {
-                products.map(products =>
-                    <Products
-                        key={products.id}
-                        products={products}
-                        addToCart={addToCart}
-                    />
-                )
-            }
-        </Container>
-    );
-};
-
-export default Shop;
+export default useCart;
